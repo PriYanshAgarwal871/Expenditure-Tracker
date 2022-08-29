@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.expendituretracker.Composables.*
+import com.example.expendituretracker.feature_expenditure.common.composable.MainScreen
 import com.example.expendituretracker.feature_expenditure.presentation.all_expenditure.composables.AllExpenditure
 import com.example.expendituretracker.feature_expenditure.presentation.month_expenditure.composables.MonthExpenditure
 import com.example.expendituretracker.feature_expenditure.presentation.update_expenditure.composables.*

@@ -3,11 +3,9 @@ package com.example.expendituretracker.feature_expenditure.presentation.update_e
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -16,10 +14,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.expendituretracker.feature_expenditure.common.Navigation.Screen
@@ -38,12 +40,12 @@ fun UpdateExpenditure(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(color = Color(0xFF696880))
             .padding(top = 30.dp),
         verticalArrangement = Arrangement.spacedBy(15.dp, alignment = Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         val rupeeID = com.example.expendituretracker.R.drawable.ic_indian_rupee_symbol
-        val state = viewModel.state
         val listOfMonths = listOf(
             "January",
             "February",
@@ -59,18 +61,31 @@ fun UpdateExpenditure(
             "December"
         )
 
-        val month = remember { mutableStateOf(listOfMonths[0]) }
+        val month = remember { mutableStateOf("") }
         val expanded = remember { mutableStateOf(false) }
 
-        val foodExpenditure = remember { mutableStateOf(0) }
-        val utilityExpenditure = remember { mutableStateOf(0) }
-        val billExpenditure = remember { mutableStateOf(0) }
-        val otherExpenditure = remember { mutableStateOf(0) }
+        val foodExpenditure = remember { mutableStateOf("") }
+        val utilityExpenditure = remember { mutableStateOf("") }
+        val billExpenditure = remember { mutableStateOf("") }
+        val otherExpenditure = remember { mutableStateOf("") }
+        val size = remember { mutableStateOf(Size.Zero) }
 
         OutlinedTextField(
             value = month.value,
             onValueChange = { month.value = it },
             label = { Text(text = "Month") },
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                unfocusedBorderColor = Color.Green,
+                focusedBorderColor = Color.Green,
+                textColor = Color.Green,
+                focusedLabelColor = Color.Green,
+                unfocusedLabelColor = Color.Green,
+                trailingIconColor = Color.DarkGray,
+                placeholderColor = Color.Green
+            ),
+            modifier = Modifier.onGloballyPositioned { coordinates ->
+                size.value = coordinates.size.toSize()
+            },
             trailingIcon = {
                 Icon(
                     imageVector = Icons.Default.ArrowDropDown,
@@ -83,7 +98,10 @@ fun UpdateExpenditure(
 
         DropdownMenu(
             expanded = expanded.value,
-            onDismissRequest = { expanded.value = false }
+            onDismissRequest = { expanded.value = false },
+            modifier = Modifier
+                .background(color = Color(0xFF696880))
+                .width(with(LocalDensity.current) { size.value.width.toDp() })
         ) {
             listOfMonths.forEach { selectedMonth ->
                 DropdownMenuItem(
@@ -92,18 +110,29 @@ fun UpdateExpenditure(
                         expanded.value = false
                     }
                 ) {
-                    Text(text = selectedMonth.toString())
+                    Text(
+                        text = selectedMonth,
+                        color = Color.Yellow
+                    )
                 }
             }
         }
 
         OutlinedTextField(
-            value = foodExpenditure.value.toString(),
+            value = foodExpenditure.value,
             onValueChange = {
-                foodExpenditure.value = it.toInt()
+                foodExpenditure.value = it
             },
             label = { Text(text = "Food Expenditure") },
-//            placeholder = { Text(text = "0")},
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                unfocusedBorderColor = Color.Green,
+                focusedBorderColor = Color.Green,
+                textColor = Color.Green,
+                focusedLabelColor = Color.Green,
+                unfocusedLabelColor = Color.Green,
+                leadingIconColor = Color.Gray,
+                placeholderColor = Color.Green
+            ),
             leadingIcon = {
                 Icon(
                     painter = painterResource(id = rupeeID),
@@ -113,12 +142,21 @@ fun UpdateExpenditure(
         )
 
         OutlinedTextField(
-            value = utilityExpenditure.value.toString(),
+            value = utilityExpenditure.value,
             onValueChange = {
-                utilityExpenditure.value = it.toInt()
+                utilityExpenditure.value = it
             },
             label = { Text(text = "Utility Expenditure") },
 //            placeholder = { Text(text = "0")},
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                unfocusedBorderColor = Color.Green,
+                focusedBorderColor = Color.Green,
+                textColor = Color.Green,
+                focusedLabelColor = Color.Green,
+                unfocusedLabelColor = Color.Green,
+                leadingIconColor = Color.Gray,
+                placeholderColor = Color.Green
+            ),
             leadingIcon = {
                 Icon(
                     painter = painterResource(id = rupeeID),
@@ -128,12 +166,21 @@ fun UpdateExpenditure(
         )
 
         OutlinedTextField(
-            value = billExpenditure.value.toString(),
+            value = billExpenditure.value,
             onValueChange = {
-                billExpenditure.value = it.toInt()
+                billExpenditure.value = it
             },
             label = { Text(text = "Bill Expenditure") },
 //            placeholder = { Text(text = "0")},
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                unfocusedBorderColor = Color.Green,
+                focusedBorderColor = Color.Green,
+                textColor = Color.Green,
+                focusedLabelColor = Color.Green,
+                unfocusedLabelColor = Color.Green,
+                leadingIconColor =  Color.Gray,
+                placeholderColor = Color.Green
+            ),
             leadingIcon = {
                 Icon(
                     painter = painterResource(id = rupeeID),
@@ -143,11 +190,20 @@ fun UpdateExpenditure(
         )
 
         OutlinedTextField(
-            value = otherExpenditure.value.toString(),
+            value = otherExpenditure.value,
             onValueChange = {
-                otherExpenditure.value = it.toInt()
+                otherExpenditure.value = it
             },
             label = { Text(text = "Other Expenditure") },
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                unfocusedBorderColor = Color.Green,
+                focusedBorderColor = Color.Green,
+                textColor = Color.Green,
+                focusedLabelColor = Color.Green,
+                unfocusedLabelColor = Color.Green,
+                leadingIconColor = Color.Gray,
+                placeholderColor = Color.Green
+            ),
             leadingIcon = {
                 Icon(
                     painter = painterResource(id = rupeeID),
@@ -162,16 +218,20 @@ fun UpdateExpenditure(
                     UpdateEventType.UpdateExpenditure(
                         Expenditure(
                             month = convertToJavaMonth(month.value),
-                            foodExpenditure = foodExpenditure.value,
-                            utilityExpenditure = utilityExpenditure.value,
-                            billExpenditure = billExpenditure.value,
-                            otherExpenditure = otherExpenditure.value
+                            foodExpenditure = foodExpenditure.value.toInt(),
+                            utilityExpenditure = utilityExpenditure.value.toInt(),
+                            billExpenditure = billExpenditure.value.toInt(),
+                            otherExpenditure = otherExpenditure.value.toInt()
                         )
                     )
                 )
                 Toast.makeText(context, "Successfully Updated", Toast.LENGTH_SHORT).show()
                 navHostController.navigate(Screen.MainScreen.route)
-            }
+            },
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color(0xFF0492C2),
+                contentColor = Color.Yellow
+            )
         ) {
             Text(
                 text = "Update",
